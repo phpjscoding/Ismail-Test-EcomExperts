@@ -102,10 +102,18 @@
               grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
               grid--{{ section.settings.columns_desktop }}-col-desktop">
               {%- for product in collection.products -%}
-                {% assign lazy_load = false %}
-                {%- if forloop.index > 2 -%}
-                  {%- assign lazy_load = true -%}
-                {%- endif -%}
+
+                
+                  
+                 {% liquid 
+                assign product_tags = product.tags
+                 assign lazy_load = false 
+                 if forloop.index > 2 
+                   assign lazy_load = true 
+                 endif 
+              %}
+                {% comment %} dont display products that have 'goes in bundle' tag {% endcomment %}
+              {% unless product_tags contains 'goes_in_bundle' %}
                 <li class="grid__item">
                   {% render 'card-product',
                     card_product: product,
@@ -119,6 +127,8 @@
 
                   %}
                 </li>
+              {% endunless %}
+              
               {%- endfor -%}
             </ul>
     

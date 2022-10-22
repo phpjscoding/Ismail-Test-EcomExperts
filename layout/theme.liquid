@@ -8,6 +8,9 @@
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 
+     
+    
+
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
@@ -247,6 +250,7 @@
 
     {% section 'announcement-bar' %}
     {% section 'header' %}
+    {{ template }}
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
@@ -285,10 +289,29 @@
         pauseSlideshow: `{{ 'sections.slideshow.pause_slideshow' | t }}`,
         playSlideshow: `{{ 'sections.slideshow.play_slideshow' | t }}`,
       }
+
+      //
+
+document.addEventListener("has_bundle", (e) => {
+  console.log(e.detail);
+  fetch(window.origin.shopify.routes.root + "add/cart", {
+    method: "POST",
+    body: JSON.stringify(e.detail),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+
+      return data;
+    });
+});
     </script>
 
     {%- if settings.predictive_search_enabled -%}
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+
+    
   </body>
 </html>
