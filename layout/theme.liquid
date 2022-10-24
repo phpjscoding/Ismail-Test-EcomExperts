@@ -290,21 +290,9 @@
         playSlideshow: `{{ 'sections.slideshow.play_slideshow' | t }}`,
       }
 
-      //
+      
 
-document.addEventListener("has_bundle", (e) => {
-  console.log(e.detail);
-  fetch(window.origin.shopify.routes.root + "add/cart", {
-    method: "POST",
-    body: JSON.stringify(e.detail),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
 
-      return data;
-    });
-});
     </script>
 
     {%- if settings.predictive_search_enabled -%}

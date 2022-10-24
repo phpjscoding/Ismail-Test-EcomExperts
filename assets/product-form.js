@@ -45,8 +45,6 @@ if (!customElements.get("product-form")) {
         config.body = formData;
         fetch(`${routes.cart_add_url}`, config)
           .then((response) => {
-            console.log(`${routes.cart_add_url}`, "config->", config);
-
             return response.json();
           })
           .then((response) => {
@@ -85,10 +83,13 @@ if (!customElements.get("product-form")) {
               // verify if selected variant is "Handbag black / medium"
               let v_selected_title = `${response.product_title} ${response.variant_title}`;
               if (v_selected_title == "Handbag black / medium") {
-                // product object available for bundle
-                const bundle_item = {
-                  quantity: 1,
-                  id: 7966413095198,
+                //define product object available for bundle product default variantid : 43652394778910
+                let bundle_item = {
+                  "items": [{
+                    "id": 43652394778910,
+                    "quantity": 1
+                    }] 
+
                 };
                 // if we have a match for the targeted variant,dispatch an event so we can listen to it in different context
                 const x_event = new CustomEvent("has_bundle", {
@@ -110,6 +111,56 @@ if (!customElements.get("product-form")) {
               "hidden"
             );
           });
+
+        // <> code to handle product with bundle
+        // listen for dispatched event 'has_bundle'
+        //  automaticlly add Soft Winter Jacket
+        // increment price with 0.01$
+        // when “Handbag is removed remove 'Soft Winter Jacket' as well
+
+        class GoesInBundleItem extends HTMLElement {
+          constructor() {
+            super();
+
+            this.div = document.createElement("div");
+            this.div.classList.add("x-span-1");
+            this.div.innerHTML = `<div id="cart-notification-product" class="cart-notification-product">
+            <div class="cart-notification-product__image global-media-settings">
+            <img src="//cdn.shopify.com/s/files/1/0670/2415/9006/products/smiling-woman-on-snowy-afternoon_925x_9a33bd14-6ee0-4987-88d6-5691caf3b58a.jpg?v=1666283730&amp;width=140" class="cart-item__image" alt="" loading="lazy" width="70" height="95">
+  </div><div><h3 class="cart-notification-product__name h4">Soft Winter Jacket</h3>
+  
+        </div>
+</div>`;
+            this.appendChild(this.div);
+          }
+        }
+
+        customElements.define("goes-in-bundle-item", GoesInBundleItem);
+        let target = document.querySelector(".product__title");
+        document.addEventListener("has_bundle", (e) => {
+          console.log(e.detail);
+          document
+            .querySelector(".cart-notification-product")
+            .after(new GoesInBundleItem());
+
+            fetch(window.Shopify.routes.root + 'cart/add.js', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(e.detail)
+            })
+            .then(x_response => {
+              this.cart.renderContents(x_response);
+               console.log(x_response.json());
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+        
+         
+        });
+        //</>
       }
 
       handleErrorMessage(errorMessage = false) {
@@ -132,40 +183,3 @@ if (!customElements.get("product-form")) {
     }
   );
 }
-
-// <> code to handle product with bundle
-// watch < div id=cart-notification > childe changes
-// see if product “Handbag -with variant options “Black” & “Medium “ was added
-// if yes automaticlly add Soft Winter Jacket
-// increment price with 0.01$
-// when “Handbag is removed remove 'Soft Winter Jacket' as well
-{
-  /* <div id="cart-notification-product" class="cart-notification-product"><div class="cart-notification-product__image global-media-settings">
-          <img src="//cdn.shopify.com/s/files/1/0670/2415/9006/products/black.jpg?v=1666375993&amp;width=140" alt="Handbag" width="70" height="95" loading="lazy">
-        </div><div><h3 class="cart-notification-product__name h4">Handbag</h3>
-        <dl><div class="product-option">
-                <dt>Color:</dt>
-                <dd>black</dd>
-              </div><div class="product-option">
-                <dt>Size:</dt>
-                <dd>small</dd>
-              </div></dl></div>
-    </div> */
-}
-// let miniCartNode = document.getElementById("cart-notification");
-
-// let observer = new MutationObserver((mutations) => {
-//   for (let mutation of mutations) {
-//     // examine new nodes, is there anything to highlight?
-
-//     for (let node of mutation.addedNodes) {
-//       // we track only elements, skip other nodes (e.g. text nodes)
-//       if (!(node instanceof HTMLElement)) continue;
-
-//       // check the inserted element for being a code snippet
-//       console.log(node);
-//     }
-//   }
-// });
-
-//</>
