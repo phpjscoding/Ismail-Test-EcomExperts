@@ -95,12 +95,16 @@
                 assign media_width = 0.45
               endif
             -%}
+            {% comment %} check if product has variant images,
+            if yes show the image of the selected variant,
+            if not, show default featured image instead .
+           {% endcomment %}
             {%- if product.selected_or_first_available_variant.featured_media != null -%}
               {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
 
               {% for variant in product.variants %}
               <li
-                data-info="sofav"
+                
                 id="Slide-{{ section.id }}-{{ variant.featured_media.id }}" 
                 class="product__media-item grid__item slider__slide 
               
@@ -495,9 +499,11 @@
                   </div>
                 </details>
               </share-button>
+      
               <script src="{{ 'share.js' | asset_url }}" defer="defer"></script>
             {%- when 'variant_picker' -%}
               {%- unless product.has_only_default_variant -%}
+               
                 {%- if block.settings.picker_type == 'button' -%}
                   <variant-radios
                     class="no-js-hidden"

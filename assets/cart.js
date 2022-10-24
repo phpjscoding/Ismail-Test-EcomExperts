@@ -5,6 +5,31 @@ class CartRemoveButton extends HTMLElement {
       event.preventDefault();
       const cartItems = this.closest('cart-items') || this.closest('cart-drawer-items');
       cartItems.updateQuantity(this.dataset.index, 0);
+      // find bundlee and bundler product
+      
+      //dd.parentElement.nextElementSibling.nextElementSibling.nextElementSibling
+       let inCartBundlee =  this.closest('cart-items').querySelector("a[href$='variant=43652394778910']")
+                           
+    //  let inCartBundler =        this.closest('cart-items').querySelector("a[href$='variant=43659110842654']")
+    let cart_item__details =  this.parentElement.parentElement.previousElementSibling.previousElementSibling
+    let currentLineTitle = cart_item__details.childNodes[0].textContent
+    let curent_line_item_size = cart_item__details.childNodes[2].textContent.split('\n')[5].trim()
+    let curent_line_item_color = cart_item__details.childNodes[2].textContent.split('\n')[2].trim()
+    
+    console.log(curent_line_item_size,curent_line_item_color)
+    if(currentLineTitle == 'Handbag' && curent_line_item_size == 'medium' && curent_line_item_color == 'black'){
+      // we found the product that goes in bundle with Soft Winder jacket
+      console.log('bundle target  matched ')
+      console.log(inCartBundlee)
+      // let bundle_remove_event = new CustomEvent('bundle_remove')
+      setTimeout(()=>{
+        document.querySelector("a[href$='variant=43652394778910']").parentElement.nextElementSibling.nextElementSibling.nextElementSibling.children[0].children[2].click()
+
+      },800)
+      
+    }
+   
+      
     });
   }
 }
@@ -65,7 +90,7 @@ class CartItems extends HTMLElement {
       sections: this.getSectionsToRender().map((section) => section.section),
       sections_url: window.location.pathname
     });
-
+      
     fetch(`${routes.cart_change_url}`, { ...fetchConfig(), ...{ body } })
       .then((response) => {
         return response.text();
@@ -84,6 +109,7 @@ class CartItems extends HTMLElement {
             document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
           elementToReplace.innerHTML =
             this.getSectionInnerHTML(parsedState.sections[section.section], section.selector);
+            
         }));
 
         this.updateLiveRegions(line, parsedState.item_count);
