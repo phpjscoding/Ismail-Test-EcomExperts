@@ -5,49 +5,35 @@ class CartRemoveButton extends HTMLElement {
       event.preventDefault();
       const cartItems = this.closest('cart-items') || this.closest('cart-drawer-items');
       cartItems.updateQuantity(this.dataset.index, 0);
-      // find bundlee and bundler product
-       
-      // let inCartBundlee =  this.closest('cart-items').querySelector("a[href$='variant=43652394778910']") || undefined
-      let inCartBundler =  this.closest('.cart-item').querySelector("a") || undefined
-                           
-  
-     let currentLineTitle =   this.closest('.cart-item').querySelector(".cart-item__name").textContent.toLocaleLowerCase()
-    
-     
-    let inCartBundler_color = inCartBundler?.parentElement.nextElementSibling.children[2].firstChild.children[1].textContent.toLowerCase()
-    let inCartBundler_size = inCartBundler?.parentElement.nextElementSibling.children[2].children[1].children[1].textContent.toLowerCase()
-    
-    if(inCartBundler_color == 'black' && inCartBundler_size == 'medium' && currentLineTitle == 'handbag' ){
-      
-      // we found the product that goes in bundle with Soft Winder jacket
-      console.log('we found the product')
-      document.querySelector("a[href$='variant=43652394778910']").parentElement.parentElement.style.transition = 'opactity .5s ease'
-      document.querySelector("a[href$='variant=43652394778910']").parentElement.parentElement.style.opacity = '0.1'
-      
-      // when target item is deleted dispath an item-removed event then listen to it on disctonectedCallBack 
-      const item_deleted_event = new CustomEvent("item-removed");
-      document.dispatchEvent(item_deleted_event);
-      
-    }
-    console.log('line removed ->',inCartBundler_color,inCartBundler_size,currentLineTitle)
-    
-   
-    
-      
+
+      // --------------------custom code --------------------
+      // 43659110842654 -> item id that triggers bundle (bundler)
+      //43652394778910 -> item id that will be coraterally removed (bundlee)
+      let bundler = '43659110842654';
+      let target_item = event.target
+       console.log(target_item.closest('.cart-item') )
+      let current_title = target_item.closest('.cart-item').querySelector('a[href*="variant="].cart-item__name')
+      let current_line_id = current_title.href.split('=')[1]
+        console.log(current_line_id)
+        if(current_line_id === bundler){
+          window.is_bundler = true;
+        }else{
+          window.is_bundler = false
+        }
+         
     });
   }
   disconnectedCallback(){
+        let bundlee = '43652394778910'
+        
+        if(window.is_bundler){
 
-     
-      document.addEventListener("item-removed",()=>{
-         
-        document.querySelector("a[href$='variant=43652394778910']").parentElement.nextElementSibling.nextElementSibling.nextElementSibling.children[0].children[2].click()
-        console.log("removed item bundle")
-
-      })
-       
-
+          document.querySelector(`a[href$="variant=${bundlee}"]`).closest('.cart-item').style.opacity=".2"
+          document.querySelector(`a[href$="variant=${bundlee}"]`).closest(".cart-item").querySelector('cart-remove-button').click()
+          console.log('bundler removed ')
+        }
   }
+ 
 }
 
 customElements.define('cart-remove-button', CartRemoveButton);
