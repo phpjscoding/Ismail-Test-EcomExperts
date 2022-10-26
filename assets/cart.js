@@ -6,31 +6,47 @@ class CartRemoveButton extends HTMLElement {
       const cartItems = this.closest('cart-items') || this.closest('cart-drawer-items');
       cartItems.updateQuantity(this.dataset.index, 0);
       // find bundlee and bundler product
-      
-      //dd.parentElement.nextElementSibling.nextElementSibling.nextElementSibling
-       let inCartBundlee =  this.closest('cart-items').querySelector("a[href$='variant=43652394778910']")
+       
+      // let inCartBundlee =  this.closest('cart-items').querySelector("a[href$='variant=43652394778910']") || undefined
+      let inCartBundler =  this.closest('.cart-item').querySelector("a") || undefined
                            
-    //  let inCartBundler =        this.closest('cart-items').querySelector("a[href$='variant=43659110842654']")
-    let cart_item__details =  this.parentElement.parentElement.previousElementSibling.previousElementSibling
-    let currentLineTitle = cart_item__details.childNodes[0].textContent
-    let curent_line_item_size = cart_item__details.childNodes[2].textContent.split('\n')[5].trim()
-    let curent_line_item_color = cart_item__details.childNodes[2].textContent.split('\n')[2].trim()
+  
+     let currentLineTitle =   this.closest('.cart-item').querySelector(".cart-item__name").textContent.toLocaleLowerCase()
     
-    console.log(curent_line_item_size,curent_line_item_color)
-    if(currentLineTitle == 'Handbag' && curent_line_item_size == 'medium' && curent_line_item_color == 'black'){
+     
+    let inCartBundler_color = inCartBundler?.parentElement.nextElementSibling.children[2].firstChild.children[1].textContent.toLowerCase()
+    let inCartBundler_size = inCartBundler?.parentElement.nextElementSibling.children[2].children[1].children[1].textContent.toLowerCase()
+    
+    if(inCartBundler_color == 'black' && inCartBundler_size == 'medium' && currentLineTitle == 'handbag' ){
+      
       // we found the product that goes in bundle with Soft Winder jacket
-      console.log('bundle target  matched ')
-      console.log(inCartBundlee)
-      // let bundle_remove_event = new CustomEvent('bundle_remove')
-      setTimeout(()=>{
-        document.querySelector("a[href$='variant=43652394778910']").parentElement.nextElementSibling.nextElementSibling.nextElementSibling.children[0].children[2].click()
-
-      },800)
+      console.log('we found the product')
+      document.querySelector("a[href$='variant=43652394778910']").parentElement.parentElement.style.transition = 'opactity .5s ease'
+      document.querySelector("a[href$='variant=43652394778910']").parentElement.parentElement.style.opacity = '0.1'
+      
+      // when target item is deleted dispath an item-removed event then listen to it on disctonectedCallBack 
+      const item_deleted_event = new CustomEvent("item-removed");
+      document.dispatchEvent(item_deleted_event);
       
     }
+    console.log('line removed ->',inCartBundler_color,inCartBundler_size,currentLineTitle)
+    
    
+    
       
     });
+  }
+  disconnectedCallback(){
+
+     
+      document.addEventListener("item-removed",()=>{
+         
+        document.querySelector("a[href$='variant=43652394778910']").parentElement.nextElementSibling.nextElementSibling.nextElementSibling.children[0].children[2].click()
+        console.log("removed item bundle")
+
+      })
+       
+
   }
 }
 

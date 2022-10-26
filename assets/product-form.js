@@ -115,7 +115,7 @@ if (!customElements.get("product-form")) {
         // <> code to handle product with bundle
         // listen for dispatched event 'has_bundle'
         //  automaticlly add Soft Winter Jacket
-        // increment price with 0.01$
+       
         // when “Handbag is removed remove 'Soft Winter Jacket' as well
 
         class GoesInBundleItem extends HTMLElement {
