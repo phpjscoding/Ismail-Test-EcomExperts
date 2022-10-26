@@ -944,16 +944,28 @@ class VariantSelects extends HTMLElement {
       this.querySelectorAll("select"),
       (select) => select.value
     );
+
+    console.log('selected color - size -> ',window.x_selected_color,this.options)
+
+   
   }
 
   updateMasterId() {
     this.currentVariant = this.getVariantData().find((variant) => {
-      return !variant.options
-        .map((option, index) => {
-          return this.options[index] === option;
-        })
-        .includes(false);
+      
+      // return !variant.options.map((option, index) => {
+      //   console.log("this.options[index]",this.options[index])
+      //     return this.options[index] == option
+      //   })
+      //   .includes(false);
+      
+    return  variant.option1 == window.x_selected_color && variant.option2 == this.options
+
     });
+
+    // console.log('this currentVariant',this.currentVariant)
+    // console.log('this.getVariantData()',this.getVariantData())
+   
   }
 
   updateMedia() {
@@ -1108,15 +1120,25 @@ customElements.define("variant-selects", VariantSelects);
 class VariantRadios extends VariantSelects {
   constructor() {
     super();
+   
+   
   }
 
   updateOptions() {
+  
     const fieldsets = Array.from(this.querySelectorAll("fieldset"));
+    
     this.options = fieldsets.map((fieldset) => {
+      
       return Array.from(fieldset.querySelectorAll("input")).find(
+        
         (radio) => radio.checked
       ).value;
     });
+
+    window.x_selected_color = this.options
+
+   
   }
 }
 

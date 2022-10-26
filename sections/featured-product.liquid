@@ -206,7 +206,7 @@
                 </share-button>
               {%- when 'variant_picker' -%}
                 {%- unless product.has_only_default_variant -%}
-                  {%- if block.settings.picker_type == 'button' -%}
+                  {%- if block.settings.picker_type != 'button' -%}
                     <variant-radios
                       class="no-js-hidden"
                       data-section="{{ section.id }}"
@@ -703,7 +703,7 @@
     {
       "type": "variant_picker",
       "name": "t:sections.featured-product.blocks.variant_picker.name",
-      "limit": 1,
+      "limit": 3,
       "settings": [
         {
           "type": "select",

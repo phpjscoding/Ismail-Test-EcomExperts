@@ -48,7 +48,7 @@ if (!customElements.get("media-gallery")) {
         const activeMedia = this.elements.viewer.querySelector(
           `[data-media-id="${mediaId}"]`
         );
-        console.log("active-media=>", activeMedia, "midiaid=>", mediaId);
+        
         this.elements.viewer
           .querySelectorAll("[data-media-id]")
           .forEach((element) => {
