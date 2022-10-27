@@ -505,11 +505,16 @@
               
 {%- unless product.has_only_default_variant -%}
                
-  {%- if block.settings.picker_type == 'button' -%}
+ 
     {%- for option in product.options_with_values -%}
        {% if option.name == 'Color' %}
 
-     
+        <variant-selects
+          class="no-js-hidden"
+          data-section="{{ section.id }}"
+          data-url="{{ product.url }}"
+          {{ block.shopify_attributes }}
+        >
 
         <variant-radios
           class="no-js-hidden"
@@ -541,7 +546,7 @@
             {{ product.variants | json }}
           </script>
         </variant-radios>
-     
+      </variant-selects >
 
         {% else %}
 
@@ -566,9 +571,9 @@
                   {%- for value in option.values -%}
                     <option
                       value="{{ value | escape }}"
-                      {% if option.selected_value == value %}
+                      {% comment %} {% if option.selected_value == value %}
                         selected="selected"
-                      {% endif %}
+                      {% endif %} {% endcomment %}
                     >
                       {{ value }}
                     </option>
@@ -626,7 +631,7 @@
         {{ product.variants | json }}
       </script>
     </variant-selects> 
-  {%- endif -%}
+  
 {%- endunless -%}
 
               <noscript class="product-form__noscript-wrapper-{{ section.id }}">

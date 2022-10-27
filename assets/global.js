@@ -918,6 +918,9 @@ class VariantSelects extends HTMLElement {
   constructor() {
     super();
     this.addEventListener("change", this.onVariantChange);
+    document.addEventListener("select-variant-color", this.onVariantChange);
+
+    
   }
 
   onVariantChange() {
@@ -945,7 +948,7 @@ class VariantSelects extends HTMLElement {
       (select) => select.value
     );
 
-    console.log('selected color - size -> ',window.x_selected_color,this.options)
+    console.log('update options -> ',window.x_selected_color,this.options)
 
    
   }
@@ -958,13 +961,16 @@ class VariantSelects extends HTMLElement {
       //     return this.options[index] == option
       //   })
       //   .includes(false);
+     let selected_size = document.querySelector("select#Option-template--16737980907806__main-1").value
+ 
+      let selected_color = document.querySelectorAll("input[name='Color']:checked")[0].value
       
-    return  variant.option1 == window.x_selected_color && variant.option2 == this.options
+      
+    return  variant.option1 == selected_color && variant.option2 == selected_size
 
     });
 
-    // console.log('this currentVariant',this.currentVariant)
-    // console.log('this.getVariantData()',this.getVariantData())
+    
    
   }
 
@@ -1120,25 +1126,31 @@ customElements.define("variant-selects", VariantSelects);
 class VariantRadios extends VariantSelects {
   constructor() {
     super();
+   this.addEventListener('change',this.updateOptions)
    
    
   }
 
   updateOptions() {
-  
-    const fieldsets = Array.from(this.querySelectorAll("fieldset"));
     
-    this.options = fieldsets.map((fieldset) => {
+    // const fieldsets = Array.from(this.querySelectorAll("fieldset"));
+    
+    // this.options = fieldsets.map((fieldset) => {
       
-      return Array.from(fieldset.querySelectorAll("input")).find(
+    //   return Array.from(fieldset.querySelectorAll("input")).find(
         
-        (radio) => radio.checked
-      ).value;
-    });
+    //     (radio) => radio.checked
+    //   ).value;
+    // });
+    document.querySelector("select#Option-template--16737980907806__main-1").value
+ 
+    let selected_color = document.querySelectorAll("input[name='Color']:checked")[0].value
+    window.x_selected_color = selected_color
 
-    window.x_selected_color = this.options
+   console.log(selected_color )
 
    
+
   }
 }
 
