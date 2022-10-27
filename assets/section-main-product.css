@@ -1244,3 +1244,8 @@ a.product__text {
   margin-left: 1.2rem;
   flex-shrink: 0;
 }
+
+   
+.cart-notification-product.is-bundle{
+ border: 1px solid red ;
+}
