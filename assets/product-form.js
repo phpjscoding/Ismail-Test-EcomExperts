@@ -95,7 +95,10 @@ if (!customElements.get("product-form")) {
                 const x_event = new CustomEvent("has_bundle", {
                   detail: bundle_item,
                 });
+                
                 document.dispatchEvent(x_event);
+
+
               }
             }
           })
@@ -112,36 +115,36 @@ if (!customElements.get("product-form")) {
             );
           });
 
-        // <> code to handle product with bundle
+        // <> code to handle product with bundle in minicart
         // listen for dispatched event 'has_bundle'
-        //  automaticlly add Soft Winter Jacket
+        //  add Soft Winter Jacket
        
-        // when “Handbag is removed remove 'Soft Winter Jacket' as well
 
-        class GoesInBundleItem extends HTMLElement {
-          constructor() {
-            super();
 
-            this.div = document.createElement("div");
-            this.div.classList.add("x-span-1");
-            this.div.innerHTML = `<div id="cart-notification-product" class="cart-notification-product">
-            <div class="cart-notification-product__image global-media-settings">
-            <img src="//cdn.shopify.com/s/files/1/0670/2415/9006/products/smiling-woman-on-snowy-afternoon_925x_9a33bd14-6ee0-4987-88d6-5691caf3b58a.jpg?v=1666283730&amp;width=140" class="cart-item__image" alt="" loading="lazy" width="70" height="95">
-  </div><div><h3 class="cart-notification-product__name h4">Soft Winter Jacket</h3>
-  
-        </div>
-</div>`;
-            this.appendChild(this.div);
-          }
-        }
-
-        customElements.define("goes-in-bundle-item", GoesInBundleItem);
-        let target = document.querySelector(".product__title");
+        
+             
+            let bundlee_div = document.createElement("article");
+            
+            bundlee_div.innerHTML = `
+            <div id="cart-notification-product" class="cart-notification-product is-bundle">
+                <div class="cart-notification-product__image global-media-settings">
+                  <img src="//cdn.shopify.com/s/files/1/0670/2415/9006/products/smiling-woman-on-snowy-afternoon_925x_9a33bd14-6ee0-4987-88d6-5691caf3b58a.jpg?v=1666283730&amp;width=140" class="cart-item__image" alt="" loading="lazy" width="70" height="95">
+                    </div>
+                  <div>
+                <h3 class="cart-notification-product__name h4">Soft Winter Jacket</h3>
+      
+                </div>
+           </div>`;
+            
+        
         document.addEventListener("has_bundle", (e) => {
-          console.log(e.detail);
-          document
+
+            //  document
+            // .querySelector(".cart-notification-product").classList.add('has-bundle');
+
+            document
             .querySelector(".cart-notification-product")
-            .after(new GoesInBundleItem());
+            .after(bundlee_div);
 
             fetch(window.Shopify.routes.root + 'cart/add.js', {
               method: 'POST',
@@ -161,6 +164,7 @@ if (!customElements.get("product-form")) {
          
         });
         //</>
+        
       }
 
       handleErrorMessage(errorMessage = false) {

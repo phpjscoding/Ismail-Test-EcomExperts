@@ -918,7 +918,7 @@ class VariantSelects extends HTMLElement {
   constructor() {
     super();
     this.addEventListener("change", this.onVariantChange);
-    document.addEventListener("select-variant-color", this.onVariantChange);
+    
 
     
   }
