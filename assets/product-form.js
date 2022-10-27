@@ -146,10 +146,6 @@ if (!customElements.get("product-form")) {
             .querySelector(".cart-notification-product")
             .after(bundlee_div);
 
-          
-       
-          
-
             fetch(window.Shopify.routes.root + 'cart/add.js', {
               method: 'POST',
               headers: {
