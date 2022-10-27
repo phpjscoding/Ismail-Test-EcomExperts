@@ -961,7 +961,7 @@ class VariantSelects extends HTMLElement {
       //     return this.options[index] == option
       //   })
       //   .includes(false);
-     let selected_size = document.querySelector("select#Option-template--16737980907806__main-1").value
+     let selected_size = document.querySelector("select").value
  
       let selected_color = document.querySelectorAll("input[name='Color']:checked")[0].value
       
