@@ -21,6 +21,12 @@
 
 {%- unless settings.cart_type == 'drawer' -%}
   <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+  <script>
+    // hide bundlee quantity inputs
+    document.querySelector(`a[href$="variant=43652394778910"]`).parentElement.nextElementSibling.nextElementSibling.nextElementSibling.style.display = 'none'
+
+    document.querySelector(`a[href$="variant=43652394778910"]`).parentElement.nextElementSibling.nextElementSibling.nextElementSibling.style.opacity = '0'
+  </script>
 {%- endunless -%}
 
 <cart-items class="page-width{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">

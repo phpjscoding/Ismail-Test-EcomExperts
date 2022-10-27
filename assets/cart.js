@@ -25,10 +25,9 @@ class CartRemoveButton extends HTMLElement {
   }
   disconnectedCallback(){
         let bundlee = '43652394778910'
-        
+
         if(window.is_bundler){
 
-          document.querySelector(`a[href$="variant=${bundlee}"]`).closest('.cart-item').style.opacity=".2"
           document.querySelector(`a[href$="variant=${bundlee}"]`).closest(".cart-item").querySelector('cart-remove-button').click()
           console.log('bundler removed ')
         }
@@ -194,3 +193,11 @@ if (!customElements.get('cart-note')) {
     }
   });
 };
+
+
+
+// hide bundlee quantity inputs
+document.querySelector(`a[href$="variant=43652394778910"]`).parentElement.nextElementSibling.nextElementSibling.nextElementSibling.firstElementChild.style.display='none'
+
+
+
