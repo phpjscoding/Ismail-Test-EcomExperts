@@ -129,7 +129,7 @@ if (!customElements.get("product-form")) {
                   headers: {
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify(e.detail)
+                  body: JSON.stringify(bundle_item)
                 })
                   .then(x_response => {
                     this.cart.renderContents(x_response);
