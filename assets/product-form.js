@@ -79,27 +79,73 @@ if (!customElements.get("product-form")) {
               );
               quickAddModal.hide(true);
             } else {
+
               this.cart.renderContents(response);
+              //create a global variable that will be toggled on and off,to render or remove the bundle from mini cart
+              window.will_add_variant_to_mini_cart = false;
+              //this will remove bundle from minit after adding
+              if (!window.will_add_variant_to_mini_cart) {
+                let is_bundle = document.querySelectorAll(".cart-notification-product.is-bundle");
+                if (is_bundle) {
+                  is_bundle.forEach(each => each.remove())
+                };
+              }
               // verify if selected variant is "Handbag black / medium"
               let v_selected_title = `${response.product_title} ${response.variant_title}`;
               if (v_selected_title == "Handbag black / medium") {
+                window.will_add_variant_to_mini_cart = true;
                 //define product object available for bundle product default variantid : 43652394778910
                 let bundle_item = {
                   "items": [{
                     "id": 43652394778910,
                     "quantity": 1
-                    }] 
+                  }]
 
                 };
-                // if we have a match for the targeted variant,dispatch an event so we can listen to it in different context
-                const x_event = new CustomEvent("has_bundle", {
-                  detail: bundle_item,
-                });
-                
-                document.dispatchEvent(x_event);
+
+                // create bundlee's HTML
+                let bundlee_div = document.createElement("article");
+
+                bundlee_div.innerHTML = `
+                            <div id="cart-notification-product" class="cart-notification-product is-bundle">
+                                <div class="cart-notification-product__image global-media-settings">
+                                  <img src="//cdn.shopify.com/s/files/1/0670/2415/9006/products/smiling-woman-on-snowy-afternoon_925x_9a33bd14-6ee0-4987-88d6-5691caf3b58a.jpg?v=1666283730&amp;width=140" class="cart-item__image" alt="" loading="lazy" width="70" height="95">
+                                    </div>
+                                  <div>
+                                <h3 class="cart-notification-product__name h4">Soft Winter Jacket</h3>
+                      
+                                </div>
+                          </div>`;
+                // set 'will_add_variant_to_mini_cart' to true so we can remove it when it's false
+                if (window.will_add_variant_to_mini_cart = true) {
+                  document
+                    .querySelector(".cart-notification-product")
+                    .after(bundlee_div);
+                }
+
+                // add Bundlee to cart
+                fetch(window.Shopify.routes.root + 'cart/add.js', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(e.detail)
+                })
+                  .then(x_response => {
+                    this.cart.renderContents(x_response);
+                    console.log(x_response.json());
+                  })
+                  .catch((error) => {
+                    console.error('Error:', error);
+                  });
+
+
 
 
               }
+
+
+
             }
           })
           .catch((e) => {
@@ -118,53 +164,14 @@ if (!customElements.get("product-form")) {
         // <> code to handle product with bundle in minicart
         // listen for dispatched event 'has_bundle'
         //  add Soft Winter Jacket
-       
 
 
-        
-             
-            let bundlee_div = document.createElement("article");
-            
-            bundlee_div.innerHTML = `
-            <div id="cart-notification-product" class="cart-notification-product is-bundle">
-                <div class="cart-notification-product__image global-media-settings">
-                  <img src="//cdn.shopify.com/s/files/1/0670/2415/9006/products/smiling-woman-on-snowy-afternoon_925x_9a33bd14-6ee0-4987-88d6-5691caf3b58a.jpg?v=1666283730&amp;width=140" class="cart-item__image" alt="" loading="lazy" width="70" height="95">
-                    </div>
-                  <div>
-                <h3 class="cart-notification-product__name h4">Soft Winter Jacket</h3>
-      
-                </div>
-           </div>`;
-            
-        
-        document.addEventListener("has_bundle", (e) => {
 
-            //  document
-            // .querySelector(".cart-notification-product").classList.add('has-bundle');
 
-            document
-            .querySelector(".cart-notification-product")
-            .after(bundlee_div);
 
-            fetch(window.Shopify.routes.root + 'cart/add.js', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(e.detail)
-            })
-            .then(x_response => {
-              this.cart.renderContents(x_response);
-               console.log(x_response.json());
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
-        
-         
-        });
+
         //</>
-        
+
       }
 
       handleErrorMessage(errorMessage = false) {

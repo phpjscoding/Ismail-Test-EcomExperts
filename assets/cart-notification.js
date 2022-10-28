@@ -35,7 +35,7 @@ class CartNotification extends HTMLElement {
     document.body.removeEventListener("click", this.onBodyClick);
 
     removeTrapFocus(this.activeElement);
-    
+
   }
 
   renderContents(parsedState) {
@@ -43,31 +43,12 @@ class CartNotification extends HTMLElement {
 
     this.getSectionsToRender().forEach((section) => {
 
-      // if(section.id == "cart-notification-product"){
-      //   console.log(parsedState.variant_id)        
-        
-      //  new DOMParser()
-      // .parseFromString(parsedState.sections["cart-notification-product"], "text/html")
-      // console.log(ttt)
-         
-      // }
 
-      
       document.getElementById(section.id).innerHTML = this.getSectionInnerHTML(
         parsedState.sections[section.id],
         section.selector
       );
 
-      if(section.id == "cart-notification-product"){
-        console.log(parsedState.variant_id)        
-        
-       let ttt =  new DOMParser()
-      .parseFromString(parsedState.sections["cart-notification-product"], "text/html")
-      console.log(ttt)
-         
-      }
-
-      
     });
 
     if (this.header) this.header.reveal();
@@ -93,10 +74,10 @@ class CartNotification extends HTMLElement {
     return new DOMParser()
       .parseFromString(html, "text/html")
       .querySelector(selector).innerHTML;
-      
+
   }
 
- 
+
 
   handleBodyClick(evt) {
     const target = evt.target;
